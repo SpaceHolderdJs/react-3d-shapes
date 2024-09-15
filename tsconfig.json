@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+      "target": "ES5",                        // Target the lowest common denominator (ES5) for broader compatibility
+      "module": "ESNext",                     // Use ESNext module resolution for modern JavaScript module support
+      "lib": ["dom", "dom.iterable", "esnext"], // Include DOM and latest JavaScript features
+      "jsx": "react-jsx",                     // Enable JSX/TSX support (react-jsx for React 17+)
+      "moduleResolution": "node",             // Node module resolution for resolving imports
+      "esModuleInterop": true,                // Enable ES6 module interoperability
+      "skipLibCheck": true,                   // Skip checking type definitions of libraries for faster builds
+      "forceConsistentCasingInFileNames": true, // Enforce consistent file name casing across the project
+      "strict": true,                         // Enable strict type-checking
+      "declaration": true,                    // Generate type declaration files for your package
+      "declarationDir": "./dist/types",       // Output directory for declaration files
+      "outDir": "./dist",                     // Output directory for transpiled files
+      "noImplicitAny": true,                  // Disallow usage of `any` type
+      "noUnusedLocals": true,                 // Warn about unused local variables
+      "noUnusedParameters": true,             // Warn about unused function parameters
+      "removeComments": true,                 // Remove comments in the output files
+      "sourceMap": true                       // Generate source maps for debugging
+    },
+    "include": ["src/**/*"],                   // Include all files in the src folder
+    "exclude": ["node_modules", "dist"]        // Exclude node_modules and dist folders
+  }
+  
