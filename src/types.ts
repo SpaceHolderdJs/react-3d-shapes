@@ -1,1 +1,1 @@
-export type SceneTypes = 'squares';
+export type SceneTypes = 'squares' | 'sphere';

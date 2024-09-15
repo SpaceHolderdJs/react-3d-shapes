@@ -7,6 +7,7 @@ export interface CubeSceneSettings {
   background?: string;
   color?: string;
   mouseSensitive?: boolean;
+  onScroll?: 'zoom' | 'rotate'; // New setting
 }
 
 export function createCubeScene(
@@ -20,6 +21,7 @@ export function createCubeScene(
     background = '#000000',
     color = '#ffffff',
     mouseSensitive = false,
+    onScroll = 'rotate', // Default setting
   } = settings;
 
   const scene = new THREE.Scene();
@@ -30,7 +32,7 @@ export function createCubeScene(
     1000
   );
 
-  const renderer = new THREE.WebGLRenderer();
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderTo.appendChild(renderer.domElement);
 
@@ -58,8 +60,10 @@ export function createCubeScene(
     cubes.push(cube);
   }
 
-  // Camera initial position
+  // Center the camera
   camera.position.z = 5;
+
+  let scrollY = 0;
 
   // Add rotation and animation
   const animate = () => {
@@ -67,8 +71,11 @@ export function createCubeScene(
 
     if (animated) {
       cubes.forEach((cube) => {
-        cube.rotation.x += 0.01;
-        cube.rotation.y += 0.01;
+        if (onScroll === 'rotate') {
+          // Rotate cubes if onScroll is 'rotate'
+          cube.rotation.x += 0.01;
+          cube.rotation.y += 0.01;
+        }
       });
     }
 
@@ -83,6 +90,25 @@ export function createCubeScene(
 
       camera.position.x += mouseX * 0.05;
       camera.position.y += mouseY * 0.05;
+    });
+  }
+
+  // Handle scroll events for zoom or rotate effects
+  if (onScroll) {
+    window.addEventListener('wheel', (event) => {
+      if (onScroll === 'rotate') {
+        const delta = event.deltaY > 0 ? 0.1 : -0.1;
+        cubes.forEach((cube) => {
+          cube.rotation.x += delta;
+          cube.rotation.y += delta;
+        });
+      } else if (onScroll === 'zoom') {
+        const zoomFactor = event.deltaY * 0.01;
+        cubes.forEach((cube) => {
+          cube.position.z += zoomFactor;
+        });
+      }
+      event.preventDefault();
     });
   }
 
