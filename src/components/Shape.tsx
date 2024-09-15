@@ -8,8 +8,10 @@ import {
 } from 'react';
 import { createCubeScene, CubeSceneSettings } from '../scenes/squares';
 import { SceneTypes } from '../types';
+import { createSphereScene, SphereSceneSettings } from '../scenes/sphere';
 
-type Props = PropsWithChildren & CubeSceneSettings;
+type Props = PropsWithChildren & CubeSceneSettings & SphereSceneSettings;
+
 export const Shapes: FC<
   Props & { scene: SceneTypes } & {
     rendererProps?: HTMLAttributes<HTMLDivElement>;
@@ -19,16 +21,32 @@ export const Shapes: FC<
   const id = useId();
 
   useEffect(() => {
+    const container =
+      sceneRef.current || (document.getElementById(id) as HTMLDivElement);
+
+    if (!container) return;
+
+    // Clear existing scene content if needed
+    container.innerHTML = '';
+
     switch (scene) {
+      case 'sphere': {
+        createSphereScene(container, sceneProps as SphereSceneSettings);
+        break;
+      }
       case 'squares':
       default: {
-        createCubeScene(
-          sceneRef?.current || (document.getElementById(id) as HTMLDivElement),
-          sceneProps
-        );
+        createCubeScene(container, sceneProps as CubeSceneSettings);
+        break;
       }
     }
-  }, [sceneRef.current, id]);
+
+    // Cleanup function
+    return () => {
+      container.innerHTML = ''; // Clear the container
+      // Additional cleanup can be added if needed
+    };
+  }, [scene, sceneProps, id]); // Include scene and sceneProps in the dependency array
 
   return (
     <div
